@@ -54,7 +54,7 @@ class ArticleList extends Component {
                         month: 'short',
                         day: '2-digit'
                       }).format(new Date(article.dateArticlePublished))}</td>
-        <td>        <td>
+          <td>
           <ButtonGroup>
             <Button size="sm" color="primary" tag={Link} to={"/articles/" + article.articleId}>Edit</Button>
             <Button size="sm" color="danger" onClick={() => this.remove(article.articleId)}>Delete</Button>

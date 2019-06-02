@@ -27,27 +27,11 @@ export default class AppNavbar extends Component {
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
-                  <NavItem>
-                    <NavLink
-                        href="/articles/category/1">Personal Development
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                      <NavLink
-                          href="/articles/category/2">Mental Health
-                      </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                        href="/articles/category/3">Psychology
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                        href="/articles/category/4">Spirituality
-                    </NavLink>
-                  </NavItem>
-                </Nav>
+          <NavItem><NavLink href="/articles/category/1">Personal Development</NavLink></NavItem>
+          <NavItem><NavLink href="/articles/category/2">Mental Health</NavLink></NavItem>
+          <NavItem><NavLink href="/articles/category/3">Psychology</NavLink></NavItem>
+          <NavItem><NavLink href="/articles/category/4">Spirituality</NavLink></NavItem>
+        </Nav>
       </Collapse>
     </Navbar>;
   }
