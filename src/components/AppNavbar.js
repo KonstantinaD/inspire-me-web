@@ -23,19 +23,19 @@ export default class AppNavbar extends Component {
         <Nav className="ml-auto" navbar>
           <NavItem>
             <NavLink
-              href="https://pusheen.com/">Log In|Register</NavLink>
+              href="https://pusheen.com/">Log In | Register</NavLink>
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
                   <NavItem>
                     <NavLink
-                      href="https://pusheen.com/">Personal Development
+                      to="/articles/category/1">Personal Development
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink
-                      href="https://pusheen.com/">Mental Health
-                    </NavLink>
+                    <Link
+                      to="/articles/category/2" activeClassName="active">Mental Health
+                    </Link>
                   </NavItem>
                   <NavItem>
                     <NavLink

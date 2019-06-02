@@ -13,10 +13,15 @@ class ArticleList extends Component {
 
   componentDidMount() {
     this.setState({isLoading: true});
-
-    fetch('articles')
-      .then(response => response.json())
-      .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}));
+    if(this.props.match.params.categoryId){
+        fetch(`articles/category/${this.props.match.params.categoryId}`)
+          .then(response => response.json())
+          .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}));
+    }else {
+        fetch('articles')
+          .then(response => response.json())
+          .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}));
+    }
   }
 
   async remove(articleId) {
@@ -45,7 +50,7 @@ class ArticleList extends Component {
 
     const articleList = articles.map(article => {
       return <tr key={article.articleId} onClick={this.handleClick.bind(this, article.articleId)}>
-        <td style={{whiteSpace: 'nowrap'}} tag={Link} to={"/articles/" + article.articleId}>{article.articleTitle}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{article.articleTitle}</td>
         <td>{article.articleText}</td>
         <td>{article.dateArticlePublished}</td>
         <td>

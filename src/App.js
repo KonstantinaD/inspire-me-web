@@ -40,14 +40,15 @@ class App extends Component {
 //        </header>
 //      </div>
 //    );
-//  }
+//  };
     render() {
        return (
          <Router>
            <Switch>
              <Route path='/' exact={true} component={Home}/>
-             <Route path='/articles' exact={true} component={ArticleList}/>
              <Route path='/articles/:articleId' component={ArticleInfo}/>
+             <Route path='/articles' component={ArticleList}/>
+             <Route path='/articles/category/:categoryId' component={ArticleList}/>
            </Switch>
          </Router>
        )

@@ -21,11 +21,10 @@ class ArticleInfo extends Component {
       return (
         <div>
           <AppNavbar/>
-          <tr>
-              <td>{this.state.article.articleId}</td>
-              <td>{this.state.article.articleTitle}</td>
-              <td>{this.state.article.articleText}</td>
-          </tr>
+          <br/>
+          <img src={this.state.article.imageUrl} alt="An article's pic" width="1000" height="300"/>
+          <h3>{this.state.article.articleTitle}</h3>
+          <p>{this.state.article.articleText}</p>
         </div>
       );
   }
