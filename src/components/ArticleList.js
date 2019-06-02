@@ -38,10 +38,6 @@ class ArticleList extends Component {
     });
   }
 
-  handleClick = (articleId, event) => {
-    this.props.history.push(`/articles/${articleId}`)
-  };
-
   render() {
     const {articles, isLoading} = this.state;
 
@@ -50,9 +46,9 @@ class ArticleList extends Component {
     }
 
     const articleList = articles.map(article => {
-      return <tr key={article.articleId} onClick={this.handleClick.bind(this, article.articleId)}>
-        <td style={{whiteSpace: 'nowrap'}}>{article.articleTitle}</td>
-        <td>{article.articleText}</td>
+      return <tr key={article.articleId}>
+        <td style={{whiteSpace: 'nowrap'}}><Link to={`/articles/${article.articleId}`}>{article.articleTitle}</Link></td>
+        <td>{article.articleText.substring(0,200)}</td>
         <td>{article.dateArticlePublished}</td>
         <td>
           <ButtonGroup>
