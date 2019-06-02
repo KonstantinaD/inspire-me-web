@@ -34,7 +34,7 @@ export default class AppNavbar extends Component {
                   </NavItem>
                   <NavItem>
                       <NavLink
-                          href="/articles/category/2" activeClassName="active">Mental Health
+                          href="/articles/category/2">Mental Health
                       </NavLink>
                   </NavItem>
                   <NavItem>

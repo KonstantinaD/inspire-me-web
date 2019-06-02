@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table } from 'reactstrap';
+import React, {Component} from 'react';
+import {Button, ButtonGroup, Container, Table} from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import Footer from './Footer';
 
 class ArticleList extends Component {
-
   constructor(props) {
     super(props);
     this.state = {articles: [], isLoading: true};
@@ -53,7 +53,11 @@ class ArticleList extends Component {
       return <tr key={article.articleId} onClick={this.handleClick.bind(this, article.articleId)}>
         <td style={{whiteSpace: 'nowrap'}}>{article.articleTitle}</td>
         <td>{article.articleText}</td>
-        <td>{article.dateArticlePublished}</td>
+        <td>{new Intl.DateTimeFormat('en-GB', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: '2-digit'
+                      }).format(new Date(article.dateArticlePublished))}</td>
         <td>
           <ButtonGroup>
             <Button size="sm" color="primary" tag={Link} to={"/articles/" + article.articleId}>Edit</Button>
@@ -64,9 +68,9 @@ class ArticleList extends Component {
     });
 
     return (
-      <div>
+      <div className="rootContainer">
         <AppNavbar/>
-        <Container fluid>
+        <Container fluid >
           <div className="float-right">
             <Button color="success" tag={Link} to="/articles/new">Create Article</Button>
           </div>
@@ -85,6 +89,7 @@ class ArticleList extends Component {
             </tbody>
           </Table>
         </Container>
+        <Footer/>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
+import Footer from './Footer';
 
 class ArticleInfo extends Component {
 
@@ -25,6 +26,7 @@ class ArticleInfo extends Component {
           <img src={this.state.article.imageUrl} alt="An article's pic" width="1000" height="300"/>
           <h3>{this.state.article.articleTitle}</h3>
           <p>{this.state.article.articleText}</p>
+          <Footer/>
         </div>
       );
   }

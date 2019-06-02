@@ -35,3 +35,22 @@
 .container, .container-fluid {
   margin-top: 20px;
 }
+
+.navItem {
+  color: white;
+}
+
+.navBrand {
+  color: white;
+}
+
+.footer {
+  position:absolute;
+  left:0;
+  bottom:0;
+  right:0;
+}
+
+.rootContainer {
+  padding-bottom:60px;
+}
