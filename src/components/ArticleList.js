@@ -14,10 +14,11 @@ class ArticleList extends Component {
   componentDidMount() {
     this.setState({isLoading: true});
     if(this.props.match.params.categoryId){
-        fetch(`articles/category/${this.props.match.params.categoryId}`)
+        fetch(`${this.props.match.params.categoryId}`)
           .then(response => response.json())
           .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}));
-    }else {
+
+    } else {
         fetch('articles')
           .then(response => response.json())
           .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}));

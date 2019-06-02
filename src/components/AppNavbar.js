@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
+import {Link} from 'react-router-dom';
 
 export default class AppNavbar extends Component {
   constructor(props) {
@@ -29,22 +29,22 @@ export default class AppNavbar extends Component {
         <Nav className="ml-auto" navbar>
                   <NavItem>
                     <NavLink
-                      to="/articles/category/1">Personal Development
+                        href="/articles/category/1">Personal Development
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <Link
-                      to="/articles/category/2" activeClassName="active">Mental Health
-                    </Link>
+                      <NavLink
+                          href="/articles/category/2" activeClassName="active">Mental Health
+                      </NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      href="https://pusheen.com/">Psychology
+                        href="/articles/category/3">Psychology
                     </NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      href="https://pusheen.com/">Spirituality
+                        href="/articles/category/4">Spirituality
                     </NavLink>
                   </NavItem>
                 </Nav>

@@ -45,10 +45,10 @@ class App extends Component {
        return (
          <Router>
            <Switch>
-             <Route path='/' exact={true} component={Home}/>
-             <Route path='/articles/:articleId' component={ArticleInfo}/>
-             <Route path='/articles' component={ArticleList}/>
-             <Route path='/articles/category/:categoryId' component={ArticleList}/>
+             <Route exact path='/' component={Home}/>
+             <Route exact path='/articles/:articleId' component={ArticleInfo}/>
+             <Route exact path='/articles' component={ArticleList}/>
+             <Route exact path='/articles/category/:categoryId' component={ArticleList}/>
            </Switch>
          </Router>
        )
