@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import AppNavbar from './AppNavbar';
 import Footer from './Footer';
+import {Badge, Media} from 'reactstrap';
+
 
 class ArticleInfo extends Component {
 
@@ -11,7 +13,6 @@ class ArticleInfo extends Component {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    console.log("---->", `${this.state.articleId}`)
 
     fetch(`${this.state.articleId}`)
       .then(response => response.json())
@@ -19,14 +20,34 @@ class ArticleInfo extends Component {
   }
 
   render(){
+      const {article, isLoading} = this.state;
+
+      if (isLoading) {
+          return <p>Loading...</p>;
+      }
+
+      const imgStyle = {
+          maxHeight: 256,
+          maxWidth: 256
+      };
+
       return (
         <div>
           <AppNavbar/>
-          <br/>
-          <img src={this.state.article.imageUrl} alt="An article's pic" width="1000" height="300"/>
-          <h3>{this.state.article.articleTitle}</h3>
-          <p>{this.state.article.articleText}</p>
-          <Footer/>
+            <Media>
+                <Media left href="#">
+                    <Media object style={imgStyle} src={article.imageUrl} alt="Generic placeholder image"></Media>
+                </Media>
+                <Media body>
+                    <Media heading>{article.articleTitle}</Media>
+                    <h6>{article.category.categoryName}</h6>
+                    <div>
+                        {article.tags.map(tag => <Badge color="success" pill>{tag.tagName}</Badge>)}
+                    </div>
+                    <p>{article.articleText}</p>
+                </Media>
+            </Media>
+            <Footer/>
         </div>
       );
   }

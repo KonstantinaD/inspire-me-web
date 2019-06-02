@@ -38,10 +38,6 @@ class ArticleList extends Component {
     });
   }
 
-  handleClick = (articleId, event) => {
-    this.props.history.push(`/articles/${articleId}`)
-  };
-
   render() {
     const {articles, isLoading} = this.state;
 
@@ -50,15 +46,15 @@ class ArticleList extends Component {
     }
 
     const articleList = articles.map(article => {
-      return <tr key={article.articleId} onClick={this.handleClick.bind(this, article.articleId)}>
-        <td style={{whiteSpace: 'nowrap'}}>{article.articleTitle}</td>
-        <td>{article.articleText}</td>
+      return <tr key={article.articleId}>
+        <td style={{whiteSpace: 'nowrap'}}><Link to={`/articles/${article.articleId}`}>{article.articleTitle}</Link></td>
+        <td>{article.articleText.substring(0,200)}</td>
         <td>{new Intl.DateTimeFormat('en-GB', {
                         year: 'numeric',
                         month: 'short',
                         day: '2-digit'
                       }).format(new Date(article.dateArticlePublished))}</td>
-        <td>
+        <td>        <td>
           <ButtonGroup>
             <Button size="sm" color="primary" tag={Link} to={"/articles/" + article.articleId}>Edit</Button>
             <Button size="sm" color="danger" onClick={() => this.remove(article.articleId)}>Delete</Button>
