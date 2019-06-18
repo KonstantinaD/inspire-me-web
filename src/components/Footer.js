@@ -25,7 +25,7 @@ export default class Footer extends Component {
          <Collapse isOpen={this.state.isOpen} navbar>
              <Nav className="ml-auto" navbar>
                 <NavItem>
-                  <span className="navItem">15 Beach Str, TN17 5RU, Devon, United Kingdom</span>
+                  <span className="navItem">21 Beach Str, BL17 3UE, Sunshine, United Kingdom</span>
                 </NavItem>
              </Nav>
              <Nav className="ml-auto" navbar>

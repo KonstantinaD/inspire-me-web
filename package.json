@@ -1,9 +1,9 @@
 {
-  "name": "inspire",
+  "name": "InspireMeWeb",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "4.1.3",
+    "bootstrap": ">=4.1.3",
     "react": "^16.8.6",
     "react-cookie": "3.0.4",
     "react-dom": "^16.8.6",
