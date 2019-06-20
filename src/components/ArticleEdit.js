@@ -26,20 +26,23 @@ class ArticleEdit extends Component {
 
   async componentDidMount() {
      let allCategories = [];
+
+     fetch ('/categories')
+                .then(response => {
+                    return response.json();
+                }).then(data => {
+                allCategories = data._embedded.categoryList.map(category => {
+                    return category
+                });
+     this.setState({categories: allCategories});
+                });
+
       if (this.props.match.params.articleId !== 'new') {
         const article = await (await fetch(`/articles/${this.props.match.params.articleId}`)).json();
 
-        fetch ('/categories')
-            .then(response => {
-                return response.json();
-            }).then(data => {
-            allCategories = data._embedded.categoryList.map(category => {
-                return category
-            });
+        this.setState({item: article});
+        }
 
-            this.setState({item: article, categories: allCategories});
-        });
-      }
   }
 
   handleChange(event) {
@@ -51,20 +54,15 @@ class ArticleEdit extends Component {
     this.setState({item});
 
     console.log("The category you selected is: " + item.category.categoryName);
-    alert("The category you selected is: " + item.category.categoryName);
-  }
-
-  onDropdownSelected =(e)=>{
-    if (e.target.value !== '') {
-      this.setState({
-        categories: this.state.categories[e.target.value]
-      })
-    }
+    alert("The category you selected is: " + event.target.value);
   }
 
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
+
+    console.log("Event.target: " + event.target);
+    console.log("Event.value: " + event.value);
 
     await fetch((item.articleId) ? '/articles/' + (item.articleId) : '/articles', {
       method: (item.articleId) ? 'PUT' : 'POST',
@@ -75,6 +73,9 @@ class ArticleEdit extends Component {
       body: JSON.stringify(item),
     });
     this.props.history.push('/articles');
+
+    console.log("Event.target: " + event.target);
+    console.log("Event.value: " + event.value);
   }
 
   render() {
@@ -86,7 +87,7 @@ class ArticleEdit extends Component {
 
     const title = <h2>{item.articleId ? 'Edit Article' : 'Create Article'}</h2>;
 
-    console.log("The category you selected is: " + item.category.categoryName);
+    console.log("The category you selected is: " + item.categoryName);
 
     return (
     <div>
@@ -112,16 +113,8 @@ class ArticleEdit extends Component {
           <div className="row">
             <FormGroup className="col-md-6 mb-3">
               <Label for="category">Select Category</Label>
-                <Input type="select" name="categoryName" id="category" value={item.category.categoryName || ''}
-                   onChange={e =>
-                            this.handleChange({
-                              ...e,
-                              target: {
-                                ...e.target,
-                                name: 'categoryName'
-                              }
-                            })
-                          }>
+                <Input type="select" name="categoryName" id="category"
+                    onChange={this.handleChange}>
                   <option value="">Select</option>
                   {categoryOptions}
                 </Input>
