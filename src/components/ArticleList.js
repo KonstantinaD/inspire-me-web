@@ -56,7 +56,7 @@ class ArticleList extends Component {
       return <tr key={article.articleId}>
         <td style={{whiteSpace: 'nowrap'}}><Link to={`/articles/view/${article.articleId}`}>{article.articleTitle}</Link></td>
         <td>{article.category.categoryName}</td>
-        <td>{article.tags.map(tag => <Badge key={article.articleId + tag.tagId} tag={Link} to={"/articles/tags/" + tag.tagId} color="secondary">{tag.tagName}</Badge>)}</td>
+        <td>{article.tags.map(tag => <Badge key={"" + article.articleId + tag.tagId} tag={Link} to={"/articles/tags/" + tag.tagId} color="secondary">{tag.tagName}</Badge>)}</td>
         <td>{new Intl.DateTimeFormat('en-GB', {
                         year: 'numeric',
                         month: 'short',
