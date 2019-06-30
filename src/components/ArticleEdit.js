@@ -37,76 +37,104 @@ class ArticleEdit extends Component {
 
      if (this.props.match.params.articleId !== 'new') {
        const article = await (await fetch(`/articles/${this.props.match.params.articleId}`)).json();
-       // convert tags to array of tagIds from array of tag objects
-
        this.setState({item: article});
      }
   }
 
-  	handleChange(event) {
-    const target = event.target
-    const name = target.name;
-    const value = target.value;
-    this.setState({
-       item: Object.assign({}, this.state.item, {[name]: value})
-    });
-  }
-
-  handleTagChange(event) {
-  // copy state to get existing tags (ids)
-    let existingTags = this.state.item.tags.map(tag => tag.tagId); // [ 1,4,8]
-    console.log("existing tags -> ", existingTags)
-  // check all available options
-    const options = event.target.options;
-//[1,2,3,4,5,...]
-    // loop available options to see which have been selected
-    for (let i = 0; i < options.length; i++){
-     if (!existingTags.includes(options[i].value)) {
-      if (options[i].selected){
-//      var ex1= { tagId: 4, tageNaem: "Anxiety"}
-        existingTags.push(Number(options[i].value));
-      }
-     }
+  handleChange(event) {
+     const target = event.target
+     const name = target.name;
+     const value = target.value;
+//	 This is the condition to keep object for category
+   	 if (name === "category") {
+    	const categoryObject = this.state.categories.find(category => category.categoryId === Number(value));
+        this.setState({
+			item: Object.assign({}, this.state.item, {category: categoryObject})
+    	});
+	 } else {
+		this.setState({
+			item: Object.assign({}, this.state.item, {[name]: value})
+    	});
+	  }
     }
 
-    // update state
-     this.setState({
-           item: Object.assign({}, this.state.item, { tags: existingTags})
-        });
-//    let item = {...this.state.item};
-//      item.tags = selectedTags;
-//      JSON.stringify(item);
-//      this.setState({item});
+     handleTagChange(event) {
+//      copy state to get existing tags (ids)
+      debugger;
+      let selectedTags = this.state.item.tags;
+      const allTags = this.state.allTags;
+//      console.log("selected tags -> ", selectedTags)
+      // all available options
+//      const options = event.target.options;
+//      this.setState(
+//            {
+//              selectedTags:
+        const value = event.target.value
 
+        let selectedTagIds = selectedTags.map(tag => tag.tagId)
+        selectedTagIds = selectedTagIds.includes(Number(value))
+                       ? selectedTagIds.filter(i => i !== Number(value))
+                       : selectedTagIds.concat(Number(value));
+
+        selectedTags = selectedTagIds.map(function(tag) {
+        return allTags.find(tag => selectedTagIds.includes(tag.tagId));
+        });
+
+
+//            selectedTags = this.state.allTags.find(selectedTags).map(tag => tag.tagId);
+//            () =>
+       console.log("selected tags after condition -> ", selectedTags)
+//          );
+//      update state
+      this.setState({
+            item: Object.assign({}, this.state.item, {tags: selectedTags})
+      });
+       console.log("selected tags - end of handleTagChange, this.state.item.tags -> ", this.state.item.tags);
   }
 
-
   async handleSubmit(event) {
-    event.preventDefault();
+    if (this.validateFields()) {
+     event.preventDefault();
+     const {item} = this.state;
+     await fetch((item.articleId) ? '/articles/' + (item.articleId) : '/articles', {
+         method: (item.articleId) ? 'PUT' : 'POST',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(item),
+       });
+     this.props.history.push('/articles');
+    }
+  }
+
+  validateFields() {
     const {item} = this.state;
 
-    await fetch((item.articleId) ? '/articles/' + (item.articleId) : '/articles', {
-      method: (item.articleId) ? 'PUT' : 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/articles');
-
-    console.log("The tags you selected are: " + this.state.item.tags.map(tag => tag.tagId));
+  	if (item.articleText === "") {
+  	   alert('Please provide text for the article');
+  	   return(false);
+  	}
+  	if (item.articleTitle === "") {
+       alert('Please provide a title');
+       return(false);
+    }
+    if (!(item.category && Object.keys(item.category).length > 0)) {
+       alert('Please select a category');
+       return(false);
+    }
+    return true;
   }
 
   render() {
     const {item} = this.state;
 
     const categoryOptions = this.state.categories.map(category =>
-        <option key={category.categoryId} name={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
+        <option key={category.categoryId} name={category.categoryName} value={category.categoryId}>{category.categoryName}</option>
         );
 
     const tagOptions = this.state.allTags.map(tag =>
-        <option key={tag.tagId} name={tag.tagId} value={tag.tagId}>{tag.tagName}</option>
+        <option key={tag.tagId} name={tag.tagName} value={tag.tagId}>{tag.tagName}</option>
         );
 
     const title = <h2>{item.articleId ? 'Edit Article' : 'Create Article'}</h2>;
@@ -135,14 +163,15 @@ class ArticleEdit extends Component {
           <div className="row">
             <FormGroup className="col-md-6 mb-3">
               <Label for="category">Select Category</Label>
-              <Input type="select" name="category" id="category" value={item.category.categoryId} onChange={this.handleChange}>
-                <option value="">Select</option>
+              <Input type="select" name="category" id="category"
+              value={(item.category && Object.keys(item.category).length > 0) ? item.category.categoryId : 0} onChange={this.handleChange}>
+                <option>Select</option>
                 {categoryOptions}
               </Input>
             </FormGroup>
             <FormGroup className="col-md-6 mb-3">
               <Label for="tags">Select Tag(s)</Label>
-                <Input type="select" name="tags" id="tags" value={item.tags.map(tag => tag.tagId)} onChange={this.handleTagChange} multiple>
+                <Input type="select" name="tags" id="tags" value={item.tags.map(tag => tag.tagId)} onClick={this.handleTagChange} multiple>
                   {tagOptions}
                 </Input>
             </FormGroup>
