@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import React, {Component} from 'react';
+import {Link, withRouter} from 'react-router-dom';
+import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -32,11 +32,11 @@ class ArticleEdit extends Component {
        .then(data => this.setState({categories: data._embedded.categoryList}));
 
      fetch ('/tags')
-            .then(response => response.json())
-            .then(data => this.setState({allTags: data._embedded.tagList}));
+       .then(response => response.json())
+       .then(data => this.setState({allTags: data._embedded.tagList}));
 
      if (this.props.match.params.articleId !== 'new') {
-       const article = await (await fetch(`/articles/${this.props.match.params.articleId}`)).json();
+       const article = await (await fetch(`/articles/view/${this.props.match.params.articleId}`)).json();
        this.setState({item: article});
      }
   }
@@ -45,7 +45,7 @@ class ArticleEdit extends Component {
      const target = event.target
      const name = target.name;
      const value = target.value;
-//	 This is the condition to keep object for category
+
    	 if (name === "category") {
     	const categoryObject = this.state.categories.find(category => category.categoryId === Number(value));
         this.setState({
@@ -56,74 +56,56 @@ class ArticleEdit extends Component {
 			item: Object.assign({}, this.state.item, {[name]: value})
     	});
 	  }
-    }
+  }
 
-     handleTagChange(event) {
-//      copy state to get existing tags (ids)
-      debugger;
-      let selectedTags = this.state.item.tags;
-      const allTags = this.state.allTags;
-//      console.log("selected tags -> ", selectedTags)
-      // all available options
-//      const options = event.target.options;
-//      this.setState(
-//            {
-//              selectedTags:
-        const value = event.target.value
-
-        let selectedTagIds = selectedTags.map(tag => tag.tagId)
-        selectedTagIds = selectedTagIds.includes(Number(value))
-                       ? selectedTagIds.filter(i => i !== Number(value))
-                       : selectedTagIds.concat(Number(value));
-
-        selectedTags = selectedTagIds.map(function(tag) {
-        return allTags.find(tag => selectedTagIds.includes(tag.tagId));
-        });
-
-
-//            selectedTags = this.state.allTags.find(selectedTags).map(tag => tag.tagId);
-//            () =>
-       console.log("selected tags after condition -> ", selectedTags)
-//          );
-//      update state
-      this.setState({
+  handleTagChange(event) {
+     let selectedTags = this.state.item.tags;
+     const allTags = this.state.allTags;
+     const value = event.target.value;
+     let selectedTagIds = selectedTags.map(tag => tag.tagId);
+        if (selectedTagIds.includes(Number(value))) {
+            selectedTags = selectedTags.filter(t => t.tagId !== Number(value))
+        } else {
+            var newTagObject = allTags.find(tag => tag.tagId === Number(value))
+            selectedTags.push(newTagObject)
+        }
+     this.setState({
             item: Object.assign({}, this.state.item, {tags: selectedTags})
-      });
-       console.log("selected tags - end of handleTagChange, this.state.item.tags -> ", this.state.item.tags);
+     });
   }
 
   async handleSubmit(event) {
-    if (this.validateFields()) {
-     event.preventDefault();
-     const {item} = this.state;
-     await fetch((item.articleId) ? '/articles/' + (item.articleId) : '/articles', {
-         method: (item.articleId) ? 'PUT' : 'POST',
-         headers: {
-           'Accept': 'application/json',
-           'Content-Type': 'application/json'
-         },
-         body: JSON.stringify(item),
-       });
-     this.props.history.push('/articles');
-    }
+      if (this.validateFields()) {
+      event.preventDefault();
+      const {item} = this.state;
+      await fetch((item.articleId) ? '/articles/' + (item.articleId) : '/articles', {
+          method: (item.articleId) ? 'PUT' : 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(item),
+        });
+      this.props.history.push('/articles');
+      }
   }
 
   validateFields() {
-    const {item} = this.state;
+     const {item} = this.state;
 
-  	if (item.articleText === "") {
-  	   alert('Please provide text for the article');
-  	   return(false);
-  	}
-  	if (item.articleTitle === "") {
-       alert('Please provide a title');
-       return(false);
-    }
-    if (!(item.category && Object.keys(item.category).length > 0)) {
-       alert('Please select a category');
-       return(false);
-    }
-    return true;
+  	 if (item.articleText === "") {
+  	    alert('Please provide text for the article');
+  	    return false;
+  	 }
+  	 if (item.articleTitle === "") {
+        alert('Please provide a title');
+        return false;
+     }
+     if (!(item.category && Object.keys(item.category).length > 0)) {
+        alert('Please select a category');
+        return false;
+     }
+     return true;
   }
 
   render() {

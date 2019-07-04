@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import {Link} from 'react-router-dom';
 import {Badge, Media} from 'reactstrap';
 
 
@@ -24,6 +25,8 @@ class ArticleInfo extends Component {
   render(){
       const {article, isLoading} = this.state;
 
+      console.log("this.props.match.params.articleId ", this.props.match.params.articleId)
+
       if (isLoading) {
           return <p>Loading...</p>;
       }
@@ -44,7 +47,8 @@ class ArticleInfo extends Component {
                     <Media heading>{article.articleTitle}</Media>
                     <h6>{article.category.categoryName}</h6>
                     <div>
-                        {article.tags.map(tag => <Badge color="success" pill key={tag.tagId}>{tag.tagName}</Badge>)}
+                        {article.tags.map(tag => <Badge color="success" pill key={tag.tagId}
+                        tag={Link} to={"/articles/tags/" + tag.tagId}>{tag.tagName}</Badge>)}
                     </div>
                     <p>{article.articleText}</p>
                 </Media>

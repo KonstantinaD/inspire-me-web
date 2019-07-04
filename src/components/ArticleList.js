@@ -11,7 +11,6 @@ class ArticleList extends Component {
          articles: [],
          isLoading: true
        };
-       this.remove = this.remove.bind(this);
   }
 
   componentDidMount() {
