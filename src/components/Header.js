@@ -5,9 +5,18 @@ import {Link} from 'react-router-dom';
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {isOpen: false};
+    this.state = {
+    isOpen: false,
+    categories: []
+    };
     this.toggle = this.toggle.bind(this);
   }
+
+  async componentDidMount() {
+       fetch ('/categories')
+         .then(response => response.json())
+         .then(data => this.setState({categories: data._embedded.categoryList}));
+    }
 
   toggle() {
     this.setState({
@@ -27,10 +36,11 @@ export default class Header extends Component {
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
-          <NavItem><NavLink href="/articles/category/1">Personal Development</NavLink></NavItem>
-          <NavItem><NavLink href="/articles/category/2">Mental Health</NavLink></NavItem>
-          <NavItem><NavLink href="/articles/category/3">Psychology</NavLink></NavItem>
-          <NavItem><NavLink href="/articles/category/4">Spirituality</NavLink></NavItem>
+           {this.state.categories.map(category =>
+              <NavItem key={category.categoryId}><NavLink key={category.categoryId} href={`/articles/category/${category.categoryId}`}>
+                {category.categoryName}
+              </NavLink></NavItem>
+           )}
         </Nav>
       </Collapse>
     </Navbar>;

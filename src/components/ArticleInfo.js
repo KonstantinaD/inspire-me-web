@@ -25,8 +25,6 @@ class ArticleInfo extends Component {
   render(){
       const {article, isLoading} = this.state;
 
-      console.log("this.props.match.params.articleId ", this.props.match.params.articleId)
-
       if (isLoading) {
           return <p>Loading...</p>;
       }
@@ -40,7 +38,7 @@ class ArticleInfo extends Component {
         <div>
           <Header/>
             <Media>
-                <Media left href="#">
+                <Media>
                     <Media object style={imgStyle} src={article.imageUrl} alt="Generic placeholder image"></Media>
                 </Media>
                 <Media body>
@@ -48,7 +46,7 @@ class ArticleInfo extends Component {
                     <h6>{article.category.categoryName}</h6>
                     <div>
                         {article.tags.map(tag => <Badge color="success" pill key={tag.tagId}
-                        tag={Link} to={"/articles/tags/" + tag.tagId}>{tag.tagName}</Badge>)}
+                        tag={Link} to={`/articles/tags/${tag.tagId}`}>{tag.tagName}</Badge>)}
                     </div>
                     <p>{article.articleText}</p>
                 </Media>

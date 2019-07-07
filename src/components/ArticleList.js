@@ -11,10 +11,12 @@ class ArticleList extends Component {
          articles: [],
          isLoading: true
        };
+       this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
     this.setState({isLoading: true});
+//    debugger;
     if (this.props.match.params.categoryId) {
         fetch(`${this.props.match.params.categoryId}`)
           .then(response => response.json())
@@ -44,6 +46,10 @@ class ArticleList extends Component {
     });
   }
 
+  handleClick() {
+    this.props.location.reload();
+  }
+
   render() {
     const {articles, isLoading} = this.state;
 
@@ -53,9 +59,12 @@ class ArticleList extends Component {
 
     const articleList = articles.map(article => {
       return <tr key={article.articleId}>
-        <td style={{whiteSpace: 'nowrap'}}><Link to={`/articles/view/${article.articleId}`}>{article.articleTitle}</Link></td>
+        <td style={{whiteSpace: 'nowrap'}}><Link to={`/articles/view/${article.articleId}`}>{article.articleTitle}</Link>
+        </td>
         <td>{article.category.categoryName}</td>
-        <td>{article.tags.map(tag => <Badge key={"" + article.articleId + tag.tagId} tag={Link} to={"/articles/tags/" + tag.tagId} color="secondary">{tag.tagName}</Badge>)}</td>
+        <td>{article.tags.map(tag => <Badge color="success" key={"" + article.articleId + tag.tagId}
+           tag={Link} to={`/articles/tags/${tag.tagId}`} onClick={this.handleClick}>{tag.tagName}</Badge>)}
+        </td>
         <td>{new Intl.DateTimeFormat('en-GB', {
                         year: 'numeric',
                         month: 'short',
@@ -63,7 +72,7 @@ class ArticleList extends Component {
                       }).format(new Date(article.dateArticlePublished))}</td>
         <td>
           <ButtonGroup>
-            <Button size="sm" color="primary" tag={Link} to={"/articles/" + article.articleId}>Edit</Button>
+            <Button size="sm" color="primary" tag={Link} to={`/articles/${article.articleId}`}>Edit</Button>
             <Button size="sm" color="danger" onClick={() => this.remove(article.articleId)}>Delete</Button>
           </ButtonGroup>
         </td>

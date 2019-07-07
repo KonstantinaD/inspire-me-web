@@ -37,7 +37,9 @@ class ArticleEdit extends Component {
 
      if (this.props.match.params.articleId !== 'new') {
        const article = await (await fetch(`/articles/view/${this.props.match.params.articleId}`)).json();
-       this.setState({item: article});
+       this.setState({
+       item: article
+       });
      }
   }
 
@@ -78,7 +80,7 @@ class ArticleEdit extends Component {
       if (this.validateFields()) {
       event.preventDefault();
       const {item} = this.state;
-      await fetch((item.articleId) ? '/articles/' + (item.articleId) : '/articles', {
+      await fetch((item.articleId) ? `/articles/${item.articleId}` : '/articles', {
           method: (item.articleId) ? 'PUT' : 'POST',
           headers: {
             'Accept': 'application/json',
@@ -112,7 +114,8 @@ class ArticleEdit extends Component {
     const {item} = this.state;
 
     const categoryOptions = this.state.categories.map(category =>
-        <option key={category.categoryId} name={category.categoryName} value={category.categoryId}>{category.categoryName}</option>
+        <option key={category.categoryId} name={category.categoryName} value={category.categoryId}>
+        {category.categoryName}</option>
         );
 
     const tagOptions = this.state.allTags.map(tag =>
@@ -146,14 +149,16 @@ class ArticleEdit extends Component {
             <FormGroup className="col-md-6 mb-3">
               <Label for="category">Select Category</Label>
               <Input type="select" name="category" id="category"
-              value={(item.category && Object.keys(item.category).length > 0) ? item.category.categoryId : 0} onChange={this.handleChange}>
+              value={(item.category && Object.keys(item.category).length > 0) ? item.category.categoryId : 0}
+              onChange={this.handleChange}>
                 <option>Select</option>
                 {categoryOptions}
               </Input>
             </FormGroup>
             <FormGroup className="col-md-6 mb-3">
               <Label for="tags">Select Tag(s)</Label>
-                <Input type="select" name="tags" id="tags" value={item.tags.map(tag => tag.tagId)} onClick={this.handleTagChange} multiple>
+                <Input type="select" name="tags" id="tags" value={item.tags.map(tag => tag.tagId)}
+                onClick={this.handleTagChange} multiple>
                   {tagOptions}
                 </Input>
             </FormGroup>

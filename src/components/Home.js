@@ -26,10 +26,13 @@ class Home extends Component {
       <div>
         <Header/>
         <Container fluid>
-          <Button color="link"><Link to="/articles">See All Articles</Link></Button>
+          <Button color="link"><Link to="/articles"><b>See All Articles</b></Link></Button>
+          <div>
+             <b>See Articles per Tag:</b>
+          </div>
           <div>
              {allTags.map(tag =>
-                <Badge color="success" pill key={tag.tagId} tag={Link} to={"/articles/tags/" + tag.tagId}>{tag.tagName}
+                <Badge color="success" pill key={tag.tagId} tag={Link} to={`/articles/tags/${tag.tagId}`}>{tag.tagName}
                 </Badge>
              )}
           </div>

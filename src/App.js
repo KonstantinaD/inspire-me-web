@@ -16,6 +16,7 @@ class App extends Component {
              <Route exact path='/articles/view/:articleId' component={ArticleInfo}/>
              <Route exact path='/articles' component={ArticleList}/>
              <Route exact path='/articles/category/:categoryId' component={ArticleList}/>
+             <Route exact path='/articles/tags/:tagId' component={ArticleList}/>
              <Route exact path='/articles/:articleId' component={ArticleEdit}/>
            </Switch>
          </Router>
