@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
+import {Button, Container, Badge, Jumbotron} from 'reactstrap';
+import {Link} from 'react-router-dom';
 import '../App.css';
 import Header from './Header';
-import {Link} from 'react-router-dom';
-import {Button, Container, Badge} from 'reactstrap';
 import Footer from './Footer';
 
 class Home extends Component {
@@ -26,17 +26,24 @@ class Home extends Component {
       <div>
         <Header/>
         <Container fluid>
-          <Button color="link"><Link to="/articles"><b>See All Articles</b></Link></Button>
-          <div>
-             <b>See Articles per Tag:</b>
+        <Jumbotron>
+          <h1 className="display-3">Welcome to Inspire Me!</h1>
+          <p className="lead">If you would like to learn what the mind can do and how limitless human abilities are, this is a great place to read more!</p>
+          <hr className="my-2" />
+          <p>Discover eye-opening content about psychology, spirituality, personal development and mental health, and be inspired to break the routine.</p>
+          <div className="float-right">
+            <Button color="primary" tag={Link} to="/articles">See All Articles</Button>
           </div>
-          <div>
-             {allTags.map(tag =>
-                <Badge color="success" pill key={tag.tagId} tag={Link} to={`/articles/tags/${tag.tagId}`}>{tag.tagName}
-                </Badge>
-             )}
-          </div>
+        </Jumbotron>
+        <h5><b>See Articles per Topic</b></h5>
+        <br/>
+        {allTags.map(tag =>
+           <Badge color="success" pill key={tag.tagId} tag={Link} to={`/articles/tags/${tag.tagId}`}>
+              {tag.tagName}
+           </Badge>
+        )}
         </Container>
+        <div className="footerPadding"></div>
         <Footer/>
       </div>
     );

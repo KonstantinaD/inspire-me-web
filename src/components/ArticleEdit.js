@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Link, withRouter} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Link, withRouter} from 'react-router-dom';
+import '../App.css';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -38,7 +39,7 @@ class ArticleEdit extends Component {
      if (this.props.match.params.articleId !== 'new') {
        const article = await (await fetch(`/articles/view/${this.props.match.params.articleId}`)).json();
        this.setState({
-       item: article
+         item: article
        });
      }
   }
@@ -95,14 +96,6 @@ class ArticleEdit extends Component {
   validateFields() {
      const {item} = this.state;
 
-  	 if (item.articleText === "") {
-  	    alert('Please provide text for the article');
-  	    return false;
-  	 }
-  	 if (item.articleTitle === "") {
-        alert('Please provide a title');
-        return false;
-     }
      if (!(item.category && Object.keys(item.category).length > 0)) {
         alert('Please select a category');
         return false;
@@ -125,52 +118,53 @@ class ArticleEdit extends Component {
     const title = <h2>{item.articleId ? 'Edit Article' : 'Create Article'}</h2>;
 
     return (
-    <div>
-      <Header/>
-      <Container>
-        {title}
+     <div>
+       <Header/>
+       <Container fluid>
+          {title}
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
-            <Label for="articleTitle">Title</Label>
+            <Label for="articleTitle">Title<span style={{color: 'red'}}> *</span></Label>
             <Input type="text" name="articleTitle" id="articleTitle" value={item.articleTitle || ''}
-                   onChange={this.handleChange}/>
+                   onChange={this.handleChange} required/>
           </FormGroup>
           <FormGroup>
-            <Label for="articleText">Text</Label>
+            <Label for="articleText">Text<span style={{color: 'red'}}> *</span></Label>
             <Input type="textarea" name="articleText" id="articleText" value={item.articleText || ''}
-                   onChange={this.handleChange}/>
+                   onChange={this.handleChange} required/>
           </FormGroup>
           <FormGroup>
-            <Label for="imageUrl">Image URL</Label>
+            <Label for="imageUrl">Image URL<span style={{color: 'red'}}> *</span></Label>
             <Input type="text" name="imageUrl" id="imageUrl" value={item.imageUrl || ''}
-                   onChange={this.handleChange}/>
+                   onChange={this.handleChange} required/>
           </FormGroup>
           <div className="row">
             <FormGroup className="col-md-6 mb-3">
-              <Label for="category">Select Category</Label>
+              <Label for="category">Select Category<span style={{color: 'red'}}> *</span></Label>
               <Input type="select" name="category" id="category"
-              value={(item.category && Object.keys(item.category).length > 0) ? item.category.categoryId : 0}
-              onChange={this.handleChange}>
-                <option>Select</option>
-                {categoryOptions}
+                     value={(item.category && Object.keys(item.category).length > 0) ? item.category.categoryId : 0}
+                     onChange={this.handleChange}>
+                   <option>Select</option>
+                   {categoryOptions}
               </Input>
             </FormGroup>
             <FormGroup className="col-md-6 mb-3">
               <Label for="tags">Select Tag(s)</Label>
-                <Input type="select" name="tags" id="tags" value={item.tags.map(tag => tag.tagId)}
-                onClick={this.handleTagChange} multiple>
-                  {tagOptions}
-                </Input>
+               <Input type="select" name="tags" id="tags" value={item.tags.map(tag => tag.tagId)}
+                      onClick={this.handleTagChange} multiple>
+                    {tagOptions}
+               </Input>
             </FormGroup>
           </div>
-          <FormGroup className="float-right">
+          <FormGroup className={"float-right bottomPadding"}>
             <Button color="primary" type="submit">Save</Button>{' '}
             <Button color="secondary" tag={Link} to="/articles">Cancel</Button>
           </FormGroup>
         </Form>
-      </Container>
-      <Footer/>
-    </div>
+
+       </Container>
+       <Footer/>
+     </div>
     );
   }
 }

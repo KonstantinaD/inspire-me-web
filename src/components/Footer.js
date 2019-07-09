@@ -19,7 +19,7 @@ export default class Footer extends Component {
     <div className="footer">
       <Navbar color="dark" dark expand="md">
          <NavbarBrand>
-            <span className="navBrand"> © Inspire Me {(new Date().getFullYear())}. All Rights Reserved.</span>
+            <span className="navBrand"> © Inspire Me {(new Date().getFullYear())}</span>
          </NavbarBrand>
          <NavbarToggler onClick={this.toggle}/>
          <Collapse isOpen={this.state.isOpen} navbar>

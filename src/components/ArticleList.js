@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, ButtonGroup, Container, Table, Badge} from 'reactstrap';
-import Header from './Header';
 import {Link} from 'react-router-dom';
+import Header from './Header';
 import Footer from './Footer';
 
 class ArticleList extends Component {
@@ -11,12 +11,10 @@ class ArticleList extends Component {
          articles: [],
          isLoading: true
        };
-       this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
     this.setState({isLoading: true});
-//    debugger;
     if (this.props.match.params.categoryId) {
         fetch(`${this.props.match.params.categoryId}`)
           .then(response => response.json())
@@ -46,10 +44,6 @@ class ArticleList extends Component {
     });
   }
 
-  handleClick() {
-    this.props.location.reload();
-  }
-
   render() {
     const {articles, isLoading} = this.state;
 
@@ -58,31 +52,34 @@ class ArticleList extends Component {
     }
 
     const articleList = articles.map(article => {
-      return <tr key={article.articleId}>
-        <td style={{whiteSpace: 'nowrap'}}><Link to={`/articles/view/${article.articleId}`}>{article.articleTitle}</Link>
+     return (
+       <tr key={article.articleId}>
+        <td><Link to={`/articles/view/${article.articleId}`}>{article.articleTitle}</Link>
         </td>
         <td>{article.category.categoryName}</td>
-        <td>{article.tags.map(tag => <Badge color="success" key={"" + article.articleId + tag.tagId}
-           tag={Link} to={`/articles/tags/${tag.tagId}`} onClick={this.handleClick}>{tag.tagName}</Badge>)}
+        <td>{article.tags.map(tag => <Badge color="success" pill key={"" + article.articleId + tag.tagId}
+           href={`/articles/tags/${tag.tagId}`}>{tag.tagName}</Badge>)}
         </td>
         <td>{new Intl.DateTimeFormat('en-GB', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: '2-digit'
-                      }).format(new Date(article.dateArticlePublished))}</td>
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit'
+                  }).format(new Date(article.dateArticlePublished))}
+        </td>
         <td>
           <ButtonGroup>
             <Button size="sm" color="primary" tag={Link} to={`/articles/${article.articleId}`}>Edit</Button>
             <Button size="sm" color="danger" onClick={() => this.remove(article.articleId)}>Delete</Button>
           </ButtonGroup>
         </td>
-      </tr>
+       </tr>
+     );
     });
 
     return (
       <div className="rootContainer">
         <Header/>
-        <Container fluid >
+        <Container fluid>
           <div className="float-right">
             <Button color="success" tag={Link} to="/articles/new">Create Article</Button>
           </div>
