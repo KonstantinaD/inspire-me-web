@@ -13,7 +13,8 @@ class RelatedArticles extends Component {
   componentDidMount() {
     fetch(`/articles/relatedArticles/${this.props.targetArticleId}`)
       .then(response => response.json())
-      .then(data => this.setState({articleId: this.props.targetArticleId, relatedArticles: data._embedded.articleList}));
+      .then(data => this.setState({articleId: this.props.targetArticleId,
+      relatedArticles: data._embedded.articleList}));
   }
 
   render() {

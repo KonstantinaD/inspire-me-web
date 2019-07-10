@@ -161,7 +161,6 @@ class ArticleEdit extends Component {
             <Button color="secondary" tag={Link} to="/articles">Cancel</Button>
           </FormGroup>
         </Form>
-
        </Container>
        <Footer/>
      </div>

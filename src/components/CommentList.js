@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Container, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Button, Collapse, Row, Col} from 'reactstrap';
+import {Container, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Button, Collapse, Row, Col}
+from 'reactstrap';
 
 class CommentList extends Component {
   constructor(props) {

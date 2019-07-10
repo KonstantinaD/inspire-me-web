@@ -28,9 +28,11 @@ class Home extends Component {
         <Container fluid>
         <Jumbotron>
           <h1 className="display-3">Welcome to Inspire Me!</h1>
-          <p className="lead">If you would like to learn what the mind can do and how limitless human abilities are, this is a great place to read more!</p>
+          <p className="lead">If you would like to learn what the mind can do and how limitless human abilities are,
+          this is a great place to read more!</p>
           <hr className="my-2" />
-          <p>Discover eye-opening content about psychology, spirituality, personal development and mental health, and be inspired to break the routine.</p>
+          <p>Discover eye-opening content about psychology, spirituality, personal development and mental health, and
+          be inspired to break the routine.</p>
           <div className="float-right">
             <Button color="primary" tag={Link} to="/articles">See All Articles</Button>
           </div>
