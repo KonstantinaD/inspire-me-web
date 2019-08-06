@@ -4,10 +4,10 @@ import {Media, Row, Col, Container} from 'reactstrap';
 class RelatedArticles extends Component {
   constructor(props) {
     super(props);
-       this.state = {
-         articleId: this.props.targetArticleId,
-         relatedArticles: []
-       };
+      this.state = {
+        articleId: this.props.targetArticleId,
+        relatedArticles: []
+    };
   }
 
   componentDidMount() {

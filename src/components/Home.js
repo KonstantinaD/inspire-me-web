@@ -7,10 +7,10 @@ import Footer from './Footer';
 
 class Home extends Component {
   constructor(props) {
-     super(props);
-       this.state = {
-          allTags: []
-       };
+    super(props);
+    this.state = {
+      allTags: []
+    };
   }
 
   async componentDidMount() {
@@ -28,7 +28,7 @@ class Home extends Component {
         <Container fluid>
         <Jumbotron>
           <h1 className="display-3">Welcome to Inspire Me!</h1>
-          <p className="lead">If you would like to learn what the mind can do and how limitless human abilities are,
+          <p className="lead">If you are curious about what the mind can do and how versatile human abilities are,
           this is a great place to read more!</p>
           <hr className="my-2" />
           <p>Discover eye-opening content about psychology, spirituality, personal development and mental health, and

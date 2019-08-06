@@ -4,17 +4,17 @@ import {Link} from 'react-router-dom';
 import '../App.css';
 import Header from './Header';
 import CommentList from './CommentList';
-import RelatedArticles from './RelatedArticles';
+import RelatedArticleList from './RelatedArticleList';
 import Footer from './Footer';
 
 class ArticleInfo extends Component {
   constructor(props) {
     super(props);
-       this.state = {
-         articleId: this.props.match.params.articleId,
-         article: {},
-         isLoading: true
-       };
+    this.state = {
+       articleId: this.props.match.params.articleId,
+       article: {},
+       isLoading: true
+    };
   }
 
   componentDidMount() {
@@ -58,7 +58,7 @@ class ArticleInfo extends Component {
             </Container>
             <CommentList targetArticleId={this.state.articleId}/>
             <div className="relatedArticlesPadding"></div>
-            <RelatedArticles targetArticleId={this.state.articleId}/>
+            <RelatedArticleList targetArticleId={this.state.articleId}/>
             <div className="footerPadding"></div>
             <Footer/>
         </div>

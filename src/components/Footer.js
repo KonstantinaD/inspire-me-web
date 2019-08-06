@@ -4,7 +4,9 @@ import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } f
 export default class Footer extends Component {
   constructor(props) {
     super(props);
-    this.state = {isOpen: false};
+    this.state = {
+      isOpen: false
+    };
     this.toggle = this.toggle.bind(this);
   }
 

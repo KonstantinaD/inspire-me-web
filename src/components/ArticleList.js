@@ -7,14 +7,21 @@ import Footer from './Footer';
 class ArticleList extends Component {
   constructor(props) {
     super(props);
-       this.state = {
-         articles: [],
-         isLoading: true
-       };
+    this.state = {
+      articles: [],
+      isLoading: true,
+      allTags: []
+    };
   }
 
   componentDidMount() {
     this.setState({isLoading: true});
+
+    fetch ('/tags')
+           .then(response => response.json())
+           .then(data => this.setState({allTags: data._embedded.tagList}));
+
+debugger;
     if (this.props.match.params.categoryId) {
         fetch(`${this.props.match.params.categoryId}`)
           .then(response => response.json())
@@ -39,13 +46,16 @@ class ArticleList extends Component {
         'Content-Type': 'application/json'
       }
     }).then(() => {
-      let updatedArticles = [...this.state.articles].filter(upd => upd.articleId !== articleId);
-      this.setState({articles: updatedArticles});
+      let updatedArticleList = [...this.state.articles].filter(upd => upd.articleId !== articleId);
+      this.setState({articles: updatedArticleList});
     });
   }
 
   render() {
-    const {articles, isLoading} = this.state;
+    const {articles, isLoading, allTags} = this.state;
+
+    console.log("articles: ", articles)
+    console.log("allTags.length: ", allTags.length)
 
     if (isLoading) {
       return <p>Loading...</p>;
@@ -57,14 +67,17 @@ class ArticleList extends Component {
         <td><Link to={`/articles/view/${article.articleId}`}>{article.articleTitle}</Link>
         </td>
         <td>{article.category.categoryName}</td>
-        <td>{article.tags.map(tag => <Badge color="success" pill key={"" + article.articleId + tag.tagId}
-           href={`/articles/tags/${tag.tagId}`}>{tag.tagName}</Badge>)}
+        <td>{allTags.length > 0 && article.tags.map(tag => <Badge color="success" pill key={"" + article.articleId +
+            tag.tagId} href={`/articles/tags/${tag.tagId}`}>{tag.tagName ||
+            allTags.find(item => item.tagId === tag).tagName}</Badge>)}
         </td>
         <td>{new Intl.DateTimeFormat('en-GB', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: '2-digit'
-                  }).format(new Date(article.dateArticlePublished))}
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit'
+            }).format(new Date(article.dateArticlePublished))}
         </td>
         <td>
           <ButtonGroup>

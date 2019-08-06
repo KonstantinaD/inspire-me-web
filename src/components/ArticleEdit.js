@@ -6,7 +6,6 @@ import Header from './Header';
 import Footer from './Footer';
 
 class ArticleEdit extends Component {
-
   emptyItem = {
     articleTitle: '',
     articleText: '',
@@ -17,14 +16,14 @@ class ArticleEdit extends Component {
 
   constructor(props) {
     super(props);
-      this.state = {
-        item: this.emptyItem,
-        categories: [],
-        allTags: []
-      };
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleTagChange = this.handleTagChange.bind(this);
+    this.state = {
+      item: this.emptyItem,
+      categories: [],
+      allTags: []
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleTagChange = this.handleTagChange.bind(this);
   }
 
   async componentDidMount() {
@@ -78,27 +77,38 @@ class ArticleEdit extends Component {
   }
 
   async handleSubmit(event) {
-      if (this.validateFields()) {
-      event.preventDefault();
-      const {item} = this.state;
-      await fetch((item.articleId) ? `/articles/${item.articleId}` : '/articles', {
-          method: (item.articleId) ? 'PUT' : 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
+     event.preventDefault();
+     if (this.validateFields()) {
+        const {item} = this.state;
+        await fetch((item.articleId) ? `/articles/${item.articleId}` : '/articles', {
+            method: (item.articleId) ? 'PUT' : 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
           body: JSON.stringify(item),
         });
-      this.props.history.push('/articles');
-      }
+     this.props.history.push('/articles');
+     }
   }
 
   validateFields() {
      const {item} = this.state;
-
+   	 if (item.articleTitle === "") {
+         alert('Please provide a title');
+         return false;
+     }
+     if (item.articleText === "") {
+         alert('Please provide text for the article');
+         return false;
+     }
+     if (item.imageUrl === "") {
+         alert('Please provide an image URL');
+         return false;
+     }
      if (!(item.category && Object.keys(item.category).length > 0)) {
-        alert('Please select a category');
-        return false;
+         alert('Please select a category');
+         return false;
      }
      return true;
   }
@@ -126,17 +136,17 @@ class ArticleEdit extends Component {
           <FormGroup>
             <Label for="articleTitle">Title<span style={{color: 'red'}}> *</span></Label>
             <Input type="text" name="articleTitle" id="articleTitle" value={item.articleTitle || ''}
-                   onChange={this.handleChange} required/>
+                   onChange={this.handleChange}/>
           </FormGroup>
           <FormGroup>
             <Label for="articleText">Text<span style={{color: 'red'}}> *</span></Label>
             <Input type="textarea" name="articleText" id="articleText" value={item.articleText || ''}
-                   onChange={this.handleChange} required/>
+                   onChange={this.handleChange}/>
           </FormGroup>
           <FormGroup>
             <Label for="imageUrl">Image URL<span style={{color: 'red'}}> *</span></Label>
             <Input type="text" name="imageUrl" id="imageUrl" value={item.imageUrl || ''}
-                   onChange={this.handleChange} required/>
+                   onChange={this.handleChange}/>
           </FormGroup>
           <div className="row">
             <FormGroup className="col-md-6 mb-3">

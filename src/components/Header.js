@@ -6,8 +6,8 @@ export default class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    isOpen: false,
-    categories: []
+      isOpen: false,
+      categories: []
     };
     this.toggle = this.toggle.bind(this);
   }
@@ -33,7 +33,7 @@ export default class Header extends Component {
     return (
       <Navbar color="dark" dark expand="md">
         <Nav tag={Link} to="/">
-           <img  style={imgStyle} src="https://bit.ly/2NFifNk" alt="Inspire Me Home"/>
+           <img  style={imgStyle} src="https://bit.ly/2XI0TPC" alt="Inspire Me Home"/>
         </Nav>
         <NavbarToggler onClick={this.toggle}/>
         <Collapse isOpen={this.state.isOpen} navbar>
