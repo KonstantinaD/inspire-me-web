@@ -70,7 +70,7 @@ class ArticleList extends Component {
         </td>
            <td>{article.category.categoryName || categoryNameByCategoryId[article.category]}</td>
            <td>{article.tags.map(tag => <Badge color="success" pill key={"" + article.articleId +
-           tag.tagId} href={`/articles/tags/${tag.tagId}`}>{tag.tagName || tagNameByTagId[tag]}</Badge>)}
+           tag.tagId} href={`/articles/tags/${tag.tagId || tag}`}>{tag.tagName || tagNameByTagId[tag]}</Badge>)}
         </td>
         <td>{new Intl.DateTimeFormat('en-GB', {
               year: 'numeric',
