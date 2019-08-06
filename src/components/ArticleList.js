@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, ButtonGroup, Container, Table, Badge} from 'reactstrap';
+import {Badge, Button, ButtonGroup, Container, Table} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
@@ -9,19 +9,13 @@ class ArticleList extends Component {
     super(props);
     this.state = {
       articles: [],
-      isLoading: true,
-      allTags: []
+        isLoading: true
     };
   }
 
   componentDidMount() {
     this.setState({isLoading: true});
 
-    fetch ('/tags')
-           .then(response => response.json())
-           .then(data => this.setState({allTags: data._embedded.tagList}));
-
-debugger;
     if (this.props.match.params.categoryId) {
         fetch(`${this.props.match.params.categoryId}`)
           .then(response => response.json())
@@ -52,24 +46,31 @@ debugger;
   }
 
   render() {
-    const {articles, isLoading, allTags} = this.state;
+      const {articles, isLoading} = this.state;
 
-    console.log("articles: ", articles)
-    console.log("allTags.length: ", allTags.length)
+      if (isLoading) {
+          return <p>Loading...</p>;
+      }
 
-    if (isLoading) {
-      return <p>Loading...</p>;
-    }
+      console.log("articles: ", articles)
 
-    const articleList = articles.map(article => {
+      const tagNameByTagId = articles.flatMap(article => article.tags)
+          .filter(tag => tag.tagName)
+          .reduce((acc, tag) => Object.assign(acc, {[tag.tagId]: tag.tagName}), {});
+
+
+      const categoryNameByCategoryId = articles.map(article => article.category)
+          .filter(category => category.categoryName)
+          .reduce((acc, category) => Object.assign(acc, {[category.categoryId]: category.categoryName}), {});
+
+      const articleList = articles.map(article => {
      return (
        <tr key={article.articleId}>
         <td><Link to={`/articles/view/${article.articleId}`}>{article.articleTitle}</Link>
         </td>
-        <td>{article.category.categoryName}</td>
-        <td>{allTags.length > 0 && article.tags.map(tag => <Badge color="success" pill key={"" + article.articleId +
-            tag.tagId} href={`/articles/tags/${tag.tagId}`}>{tag.tagName ||
-            allTags.find(item => item.tagId === tag).tagName}</Badge>)}
+           <td>{article.category.categoryName || categoryNameByCategoryId[article.category]}</td>
+           <td>{article.tags.map(tag => <Badge color="success" pill key={"" + article.articleId +
+           tag.tagId} href={`/articles/tags/${tag.tagId}`}>{tag.tagName || tagNameByTagId[tag]}</Badge>)}
         </td>
         <td>{new Intl.DateTimeFormat('en-GB', {
               year: 'numeric',
