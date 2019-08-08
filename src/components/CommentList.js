@@ -45,6 +45,11 @@ class CommentList extends Component {
 
     const buttonTitle = <span>{collapse ? `Hide Comments (${numComments})` : `See Comments (${numComments})`}</span>;
 
+    const commentPublisherNameByPublisherId = comments.map(comment => comment.commentPublishedBy)
+              .filter(commentPublishedBy => commentPublishedBy.userName)
+              .reduce((acc, commentPublishedBy) => Object.assign(acc, {[commentPublishedBy.userId]:
+              commentPublishedBy.userName}), {});
+
     const commentList = comments.map(comment => {
      return (
         <Container key={comment.commentId} fluid>
@@ -54,7 +59,8 @@ class CommentList extends Component {
              <ListGroupItemHeading>
              <Row>
                <Col xs="4">
-                 <b>{comment.commentPublishedBy.userName}</b>
+                 <b>{comment.commentPublishedBy.userName ||
+                 commentPublisherNameByPublisherId[comment.commentPublishedBy]}</b>
                </Col>
                <Col xs="4">{new Intl.DateTimeFormat('en-GB', {
                              year: 'numeric',
