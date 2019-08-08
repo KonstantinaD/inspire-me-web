@@ -52,8 +52,6 @@ class ArticleList extends Component {
           return <p>Loading...</p>;
       }
 
-      console.log("articles: ", articles)
-
       const tagNameByTagId = articles.flatMap(article => article.tags)
           .filter(tag => tag.tagName)
           .reduce((acc, tag) => Object.assign(acc, {[tag.tagId]: tag.tagName}), {});
