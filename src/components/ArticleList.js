@@ -1,15 +1,23 @@
 import React, {Component} from 'react';
 import {Badge, Button, ButtonGroup, Container, Table} from 'reactstrap';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
+import {instanceOf} from 'prop-types';
+import {withCookies, Cookies} from 'react-cookie';
 import Header from './Header';
 import Footer from './Footer';
 
 class ArticleList extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
   constructor(props) {
     super(props);
+    const {cookies} = props;
     this.state = {
       articles: [],
-        isLoading: true
+      csrfToken: cookies.get('XSRF-TOKEN'),
+      isLoading: true
     };
   }
 
@@ -17,18 +25,21 @@ class ArticleList extends Component {
     this.setState({isLoading: true});
 
     if (this.props.match.params.categoryId) {
-        fetch(`${this.props.match.params.categoryId}`)
+        fetch(`${this.props.match.params.categoryId}`, {credentials: 'include'})
           .then(response => response.json())
-          .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}));
+          .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}))
+          .catch(() => this.props.history.push('/'));
     }
     else if (this.props.match.params.tagId) {
-             fetch(`${this.props.match.params.tagId}`)
+             fetch(`${this.props.match.params.tagId}`, {credentials: 'include'})
                .then(response => response.json())
-               .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}));
+               .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}))
+               .catch(() => this.props.history.push('/'));
     } else {
-        fetch('articles')
+        fetch('articles', {credentials: 'include'})
           .then(response => response.json())
-          .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}));
+          .then(data => this.setState({articles: data._embedded.articleList, isLoading: false}))
+          .catch(() => this.props.history.push('/'));
     }
   }
 
@@ -36,9 +47,11 @@ class ArticleList extends Component {
     await fetch(`/articles/${articleId}`, {
       method: 'DELETE',
       headers: {
+        'X-XSRF-TOKEN': this.state.csrfToken,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      }
+      },
+      credentials: 'include'
     }).then(() => {
       let updatedArticleList = [...this.state.articles].filter(upd => upd.articleId !== articleId);
       this.setState({articles: updatedArticleList});
@@ -117,4 +130,4 @@ class ArticleList extends Component {
   }
 }
 
-export default ArticleList;
+export default withCookies(withRouter(ArticleList));

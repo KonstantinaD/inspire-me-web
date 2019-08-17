@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Container, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Button, Collapse, Row, Col} from 'reactstrap';
+import {Link} from 'react-router-dom';
+import CommentAdd from './CommentAdd';
 
 class CommentList extends Component {
   constructor(props) {
@@ -81,12 +83,16 @@ class CommentList extends Component {
              </ListGroupItemText>
            </ListGroupItem>
         </ListGroup>
+        <CommentAdd/>
         </Container>
      );
   });
 
       return (
        <Container fluid>
+         <div>
+           <Button color="success" tag={Link} to="/comments">Create Comment</Button>
+         </div>
          <div className="float-right">
            {commentList.length > 0 && <Button color="info" style={{marginBottom: '1rem'}}
            onClick={this.toggle}>{buttonTitle}</Button>}

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Badge, Media, Container} from 'reactstrap';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
+import {instanceOf} from 'prop-types';
+import {withCookies, Cookies} from 'react-cookie';
 import '../App.css';
 import Header from './Header';
 import CommentList from './CommentList';
@@ -8,20 +10,27 @@ import RelatedArticleList from './RelatedArticleList';
 import Footer from './Footer';
 
 class ArticleInfo extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
   constructor(props) {
     super(props);
+    const {cookies} = props;
     this.state = {
        articleId: this.props.match.params.articleId,
        article: {},
+       csrfToken: cookies.get('XSRF-TOKEN'),
        isLoading: true
     };
   }
 
   componentDidMount() {
     this.setState({isLoading: true});
-    fetch(`${this.state.articleId}`)
+    fetch(`${this.state.articleId}`, {credentials: 'include'})
       .then(response => response.json())
-      .then(data => this.setState({article: data, isLoading: false}));
+      .then(data => this.setState({article: data, isLoading: false}))
+      .catch(() => this.props.history.push('/'));
   }
 
   render() {
@@ -66,4 +75,4 @@ class ArticleInfo extends Component {
   }
 }
 
-export default ArticleInfo;
+export default withCookies(withRouter(ArticleInfo));

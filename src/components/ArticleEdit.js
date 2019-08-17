@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import {Link, withRouter} from 'react-router-dom';
+import {instanceOf} from 'prop-types';
+import {Cookies, withCookies} from 'react-cookie';
 import '../App.css';
 import Header from './Header';
 import Footer from './Footer';
 
 class ArticleEdit extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
   emptyItem = {
     articleTitle: '',
     articleText: '',
@@ -16,8 +22,10 @@ class ArticleEdit extends Component {
 
   constructor(props) {
     super(props);
+    const {cookies} = props;
     this.state = {
       item: this.emptyItem,
+      csrfToken: cookies.get('XSRF-TOKEN'),
       categories: [],
       allTags: []
     };
@@ -27,19 +35,23 @@ class ArticleEdit extends Component {
   }
 
   async componentDidMount() {
-     fetch ('/categories')
+     fetch ('/categories', {credentials: 'include'})
        .then(response => response.json())
        .then(data => this.setState({categories: data._embedded.categoryList}));
 
-     fetch ('/tags')
+     fetch ('/tags', {credentials: 'include'})
        .then(response => response.json())
        .then(data => this.setState({allTags: data._embedded.tagList}));
 
      if (this.props.match.params.articleId !== 'new') {
-       const article = await (await fetch(`/articles/view/${this.props.match.params.articleId}`)).json();
-       this.setState({
-         item: article
-       });
+       try {
+         const article = await (await fetch(`/articles/view/${this.props.match.params.articleId}`, {credentials: 'include'})).json();
+         this.setState({
+           item: article
+         });
+       } catch (error) {
+         this.props.history.push('/');
+       }
      }
   }
 
@@ -83,10 +95,12 @@ class ArticleEdit extends Component {
         await fetch((item.articleId) ? `/articles/${item.articleId}` : '/articles', {
             method: (item.articleId) ? 'PUT' : 'POST',
             headers: {
+              'X-XSRF-TOKEN': this.state.csrfToken,
               'Accept': 'application/json',
               'Content-Type': 'application/json'
             },
           body: JSON.stringify(item),
+          credentials: 'include'
         });
      this.props.history.push('/articles');
      }
@@ -178,5 +192,5 @@ class ArticleEdit extends Component {
   }
 }
 
-export default withRouter(ArticleEdit);
+export default withCookies(withRouter(ArticleEdit));
 

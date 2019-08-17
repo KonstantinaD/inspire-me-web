@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {CookiesProvider} from 'react-cookie';
 import './App.css';
 import Home from './components/Home';
 import ArticleList from './components/ArticleList';
@@ -13,6 +14,7 @@ class App extends Component {
 
     render() {
        return (
+        <CookiesProvider>
          <Router>
            <Switch>
              <Route exact path='/' component={Home}/>
@@ -26,6 +28,7 @@ class App extends Component {
              <Route exact path='/login-register' component={ComingSoon}/>
            </Switch>
          </Router>
+        </CookiesProvider>
        )
     }
 }
